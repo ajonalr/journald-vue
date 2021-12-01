@@ -1,7 +1,7 @@
 <template>
   <div class="entry-title d-flex justify-content-between p2">
     <div>
-      <span class="text-black fs-3 fw-bold">15</span>
+      <span class="text-black fs-3 fw-bold">16</span>
       <span class="mx-1 fs-3 fw-bold">Julio</span>
       <span class="mx-2 fs-4 fw-light">2021 Martes</span>
     </div>
@@ -25,7 +25,9 @@
     <textarea placeholder="CUENTAME TU DIA"></textarea>
   </div>
 
-  <Fab />
+  <Fab 
+    icon="fa-save"
+  />
 
   <img
     src="https://decodev.net/wp-content/uploads/2021/10/DeCoDev.png"

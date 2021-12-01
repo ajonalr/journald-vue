@@ -1,11 +1,18 @@
 <template>
   <button class="btn btn-primary">
-    <i class="fa fr-2x fa-plus"></i>
+    <i class="fa fr-2x" :class="icon" ></i>
   </button>
 </template>
 
 <script>
-export default {};
+export default {
+  props: {
+    icon: {
+      type: String,
+      default: 'fa-plus'
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -13,7 +20,7 @@ button {
   border-radius: 100%;
   bottom: 20px;
   height: 60px;
-  position: fixed; 
+  position: fixed;
   right: 20px;
   width: 60px;
 }
