@@ -25,9 +25,7 @@
     <textarea placeholder="CUENTAME TU DIA"></textarea>
   </div>
 
-  <Fab 
-    icon="fa-save"
-  />
+  <Fab icon="fa-save" />
 
   <img
     src="https://decodev.net/wp-content/uploads/2021/10/DeCoDev.png"
@@ -38,30 +36,50 @@
 
 <script>
 import { defineAsyncComponent } from "vue";
+import { mapGetters } from "vuex";
 export default {
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
   components: {
     Fab: defineAsyncComponent(() => import("../components/Fab.vue")),
+  },
+  computed: {
+    ...mapGetters("journal", ["getEntriesById"]),
+  },
+  methods: {
+    loadEntry() {
+      const entry = this.getEntriesById(this.id);
+      console.log(entry);
+    },
+  },
+
+  created() {
+    console.log(this.id);
+    this.loadEntry();
   },
 };
 </script>
 
 <style lang="scss" scoped>
+textarea {
+  font-size: 20px;
+  border: none;
+  height: 100%;
 
-textarea { 
-   font-size:20px;
-   border: none;
-   height: 100%;
-   
-   &:focus {
-      outline: none;
-   }
+  &:focus {
+    outline: none;
+  }
 }
 
-img { 
-   width: 200px;
-   position:fixed;
-   bottom: 150px;
-   right: 20px;
-   box-shadow: 0px 5px 10px rgba($color: #0000, $alpha: 1.0);
+img {
+  width: 200px;
+  position: fixed;
+  bottom: 150px;
+  right: 20px;
+  box-shadow: 0px 5px 10px rgba($color: #0000, $alpha: 1);
 }
 </style>
