@@ -40,7 +40,6 @@ const days = [
   "Viernes",
   "Sábado",
 ];
-
 export default {
   props: {
     entry: {
