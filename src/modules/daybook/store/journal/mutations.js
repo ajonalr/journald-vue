@@ -1,6 +1,9 @@
 
 
-export const setEsntries = (/*state*/) => {
+export const setEsntries = (state, entries) => {
+
+   state.entryes = [ ...state.entryes, ...entries ]
+   state.isloading = false
 
 }
 
