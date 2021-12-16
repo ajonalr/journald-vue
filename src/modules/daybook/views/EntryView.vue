@@ -1,6 +1,6 @@
 <template>
   <template v-if="entry">
-    <div  class="entry-title d-flex justify-content-between p2">
+    <div class="entry-title d-flex justify-content-between p2">
       <div>
         <span class="text-black fs-3 fw-bold">{{ day }}</span>
         <span class="mx-1 fs-3 fw-bold">{{ month }}</span>
@@ -26,7 +26,7 @@
     </div>
   </template>
 
-  <Fab icon="fa-save" />
+  <Fab icon="fa-save" @on:click="saveEntry" />
 
   <img
     src="https://decodev.net/wp-content/uploads/2021/10/DeCoDev.png"
@@ -37,7 +37,7 @@
 
 <script>
 import { defineAsyncComponent } from "vue";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import getDateMonthYear from "../helpers/getDateMonthYear";
 
 export default {
@@ -73,10 +73,29 @@ export default {
     },
   },
   methods: {
+    ...mapActions("journal", ["undateEntry"]),
     loadEntry() {
-      const entry = this.getEntriesById(this.id);
-      if (!entry) return this.$router.push({ name: "no-entry" });
+      let entry;
+
+      if (this.id == "new") {
+        entry = {
+          text: "",
+          date: new Date().getTime(),
+        };
+      } else {
+        entry = this.getEntriesById(this.id);
+        if (!entry) return this.$router.push({ name: "no-entry" });
+      }
       this.entry = entry;
+    },
+    async saveEntry() {
+      if (this.entry.id) {
+        // va actulizar una entrada
+        await this.undateEntry(this.entry);
+      } else {
+        // va a guardar una entrada
+      
+      }
     },
   },
   created() {

@@ -7,7 +7,11 @@ export const setEsntries = (state, entries) => {
 
 }
 
-export const updateEsntry = (/*state*/) => {
+export const updateEsntry = (state, entry) => { //entry update
+
+   const idx = state.entryes.map(entry => entry.id ).indexOf(entry.id)
+
+   state.entryes[idx] = entry
 
 }
 

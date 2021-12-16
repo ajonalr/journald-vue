@@ -3,7 +3,7 @@
     <h1 class="align-self-center">NO HAY DATOS SELECCIONADOS</h1>
   </div>
 
-  <Fab></Fab>
+  <Fab @on:click="nuevaEntrada"></Fab>
 </template>
 
 <script>
@@ -12,6 +12,14 @@ export default {
   components: {
     Fab: defineAsyncComponent(() => import("../components/Fab.vue")),
   },
+
+  methods: {
+
+    nuevaEntrada() {
+      this.$router.push({ name: 'entry', params: { id:'new'}})
+    }
+
+  }
 };
 </script>
 

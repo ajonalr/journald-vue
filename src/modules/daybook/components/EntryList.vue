@@ -6,6 +6,12 @@
       </div>
     </div>
 
+    <div class="my-2 d-flex felx-column">
+      <button type="button" class="btn btn-primary mx-3"
+      @click="$router.push({ name: 'entry', params: { id: 'new'}})"
+      ><i class="fa fa-plus-circle" aria-hidden="true"></i> NUEVA ENTRADA</button>
+    </div>
+
     <div class="entry-scrollarea">
       <Entry v-for="entry in entriesByTerm" :key="entry.id" :entry='entry' >Entry{{ item }}</Entry>
     </div>

@@ -16,7 +16,17 @@ export const getEntries = async ({ commit }) => {
 }
 
 
-export const undateEntry = async (/*{ commit }*/) => {
+export const undateEntry = async ({ commit }, entry) => {
+
+   // extraer data quitar id
+   const { date, text, picture } = entry
+   const dateToSave = { date, text, picture }
+   // await journalApi.put(paht)
+
+   await journalApi.put(`/entrys/${entry.id}.json`, dateToSave )
+
+   // commit de una mutacion -> updateEntr
+   commit('updateEsntry', {...entry})
 
 }
 
