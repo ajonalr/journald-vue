@@ -15,7 +15,16 @@ export const updateEsntry = (state, entry) => { //entry update
 
 }
 
-export const adEsntry = (/*state*/) => {
+export const adEsntry = (state, entry) => {
+
+   state.entryes = [ entry, ...state.entryes ]
+
+}
+
+export const deteleEntry = (state, id) => {
+
+   state.entryes = state.entryes.filter(entry => entry.id !== id)
+   
 
 }
 
