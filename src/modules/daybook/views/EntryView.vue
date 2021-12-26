@@ -8,6 +8,14 @@
       </div>
 
       <div>
+        <input
+          type="file"
+          @change="onselectImage"
+          ref="imageSelector"
+          v-show="false"
+          accept="image/*"
+        />
+
         <button
           class="btn btn-danger m-2"
           v-if="entry.id"
@@ -17,7 +25,11 @@
           <i class="fa fa-trash-alt" aria-hidden="true"></i>
         </button>
 
-        <button class="btn btn-primary m-2">
+        <button class="btn btn-warning m-2" @click="cancelImg">
+          Cancelar Foto
+          <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+        </button>
+        <button class="btn btn-primary m-2" @click="onSelectedImage">
           Subir Foto
           <i class="fa fa-upload" aria-hidden="true"></i>
         </button>
@@ -33,7 +45,15 @@
   <Fab icon="fa-save" @on:click="saveEntry" />
 
   <img
-    src="https://decodev.net/wp-content/uploads/2021/10/DeCoDev.png"
+    v-if="entry.picture && !localImg"
+    :src="entry.picture"
+    alt="Ari Dev"
+    class="img-thumbnail"
+  />
+
+  <img
+    v-if="localImg"
+    :src="localImg"
     alt="entry-picture"
     class="img-thumbnail"
   />
@@ -42,8 +62,9 @@
 <script>
 import { defineAsyncComponent } from "vue";
 import { mapGetters, mapActions } from "vuex";
+import Swal from "sweetalert2";
 import getDateMonthYear from "../helpers/getDateMonthYear";
-
+import uploadImage from "../helpers/uploadimage.js";
 export default {
   props: {
     id: {
@@ -54,13 +75,13 @@ export default {
   components: {
     Fab: defineAsyncComponent(() => import("../components/Fab.vue")),
   },
-
   data() {
     return {
       entry: null,
+      localImg: null,
+      file: null,
     };
   },
-
   computed: {
     ...mapGetters("journal", ["getEntriesById"]),
     day() {
@@ -93,18 +114,81 @@ export default {
       this.entry = entry;
     },
     async saveEntry() {
+      new Swal({
+        title: "ESPERA POR FAVOR",
+        allowOutsideClick: false,
+      });
+
+      Swal.showLoading();
+
+      const picture = await uploadImage(this.file);
+
+      this.entry.picture = picture;
       if (this.entry.id) {
         // va actulizar una entrada
         await this.undateEntry(this.entry);
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "ENTRADA ACTULIZADA CON EXITO",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       } else {
         // va a guardar una entrada
         const id = await this.createEntry(this.entry);
+
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "ENTRADA REGISTRADA CON EXITO",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         return this.$router.push({ name: "entry", params: { id } });
       }
+      this.cancelImg();
+
     },
     async onDeleteEntry() {
-      this.deleteEntry(this.entry.id);
-      return this.$router.push({ name: "no-entry" });
+      Swal.fire({
+        title: "ELIMINAR",
+        text: "ESTA SEGURO DE ELIMINAR",
+        showDenyButton: true,
+        confirmButtonText: "SI, ESTOY SEGURO!",
+        denyButtonText: `NO, CANCELAR`,
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          this.deleteEntry(this.entry.id);
+          this.$router.push({ name: "no-entry" });
+          Swal.fire("ENTRADA ELIMINADA!", "", "success");
+        } else if (result.isDenied) {
+          Swal.fire("ENTRADA NO ELIMINADA", "", "info");
+        }
+      });
+    },
+    onselectImage(e) {
+      const file = e.target.files[0];
+
+      if (!file) {
+        this.file = null;
+        this.localImg = null;
+        return;
+      }
+
+      this.file = file;
+
+      const fr = new FileReader();
+      fr.onload = () => (this.localImg = fr.result);
+      fr.readAsDataURL(file);
+    },
+    cancelImg() {
+      this.localImg = null;
+      this.file = null;
+    },
+    onSelectedImage() {
+      this.$refs.imageSelector.click();
     },
   },
   created() {
