@@ -53,9 +53,9 @@ import useAuth from "../composables/useAuth";
 export default {
   setup() {
     const userForm = ref({
-      email: "",
-      name: "",
-      password: "",
+      email: "ariel12jona@gmail.com",
+      name: "jonas",
+      password: "jonas123",
     });
 
     const { createdUser } = useAuth();
@@ -63,8 +63,11 @@ export default {
     return {
       userForm,
       onSubmit: async () => {
-         await createdUser(userForm.value);
-        
+        const resp = await createdUser(userForm.value);
+        console.log(resp);
+        return {
+          resp
+        };
       },
     };
   },
