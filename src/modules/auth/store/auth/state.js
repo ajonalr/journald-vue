@@ -1,6 +1,6 @@
 export default () => ({
 
-    status: 'authenticate',
+    status: 'authenticating',
     user: null,
     idToken: null,
     refreshToken: null

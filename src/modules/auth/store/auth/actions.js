@@ -6,21 +6,22 @@ import authApi from '@/api/AuthApi'
 // }
 
 
-export const createdUser = async({ commit }, user) => {
-
+export const createdUser = async ({ commit }, user) => {
     const { email, nombre, password } = user;
-
     try {
         const { data } = await authApi.post(':signUp', {
             email,
             password,
             returnSecureToken: true
         })
-        console.log(data);
+        const { idToken } = data;
+        await authApi.post(':update', { displayName: nombre, idToken })
+
+
+        // TODO: mutation para login
         return { ok: true }
     } catch (error) {
-        console.log('entro');
         return { ok: false, message: error.response.data.error.message }
     }
-
 }
+
