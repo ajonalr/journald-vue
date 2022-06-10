@@ -53,9 +53,9 @@ import useAuth from "../composables/useAuth";
 export default {
   setup() {
     const userForm = ref({
-      email: "ariel12jona@gmail.com",
-      name: "jonas",
-      password: "jonas123",
+      email: "",
+      name: "",
+      password: "",
     });
 
     const { createdUser } = useAuth();

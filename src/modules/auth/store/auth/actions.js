@@ -14,11 +14,11 @@ export const createdUser = async ({ commit }, user) => {
             password,
             returnSecureToken: true
         })
-        const { idToken } = data;
+        const { idToken, refreshToken } = data;
         await authApi.post(':update', { displayName: nombre, idToken })
+        delete user.password
+        commit('loginUser', { user, idToken, refreshToken })
 
-
-        // TODO: mutation para login
         return { ok: true }
     } catch (error) {
         return { ok: false, message: error.response.data.error.message }
