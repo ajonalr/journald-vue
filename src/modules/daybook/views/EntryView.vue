@@ -192,7 +192,6 @@ export default {
     },
   },
   created() {
-    // console.log(this.id);
     this.loadEntry();
   },
   watch: {

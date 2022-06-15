@@ -15,3 +15,15 @@ export const loginUser = (state, { user, idToken, refreshToken }) => {
    state.user = user;
    state.status = 'auteticated'
 }
+
+export const logout = (state) => {
+
+   state.status = 'not-authenticated'
+   state.user = null
+   state.idToken = null
+   state.refreshToken = null
+
+   localStorage.removeItem('idToken')
+   localStorage.removeItem('refreshToken')
+
+}

@@ -1,39 +1,18 @@
 <template>
   <span class="login100-form-title p-b-41"> Registro </span>
-  <form
-    @submit.prevent="onSubmit"
-    class="login100-form validate-form p-b-33 p-t-5"
-  >
+  <form @submit.prevent="onSubmit" class="login100-form validate-form p-b-33 p-t-5">
     <div class="wrap-input100 validate-input" data-validate="Ingrese su nombre">
-      <input
-        v-model="userForm.name"
-        class="input100"
-        type="text"
-        placeholder="Nombre"
-        required
-      />
+      <input v-model="userForm.name" class="input100" type="text" placeholder="Nombre" required />
       <span class="focus-input100" data-placeholder="&#xe82a;"></span>
     </div>
 
     <div class="wrap-input100 validate-input" data-validate="Enter username">
-      <input
-        v-model="userForm.email"
-        class="input100"
-        type="email"
-        placeholder="Correo"
-        required
-      />
+      <input v-model="userForm.email" class="input100" type="email" placeholder="Correo" required />
       <span class="focus-input100" data-placeholder="&#xe818;"></span>
     </div>
 
     <div class="wrap-input100 validate-input" data-validate="Enter password">
-      <input
-        v-model="userForm.password"
-        class="input100"
-        type="password"
-        placeholder="Contraseña"
-        required
-      />
+      <input v-model="userForm.password" class="input100" type="password" placeholder="Contraseña" required />
       <span class="focus-input100" data-placeholder="&#xe80f;"></span>
     </div>
 
@@ -50,24 +29,23 @@
 <script>
 import { ref } from "vue";
 import useAuth from "../composables/useAuth";
+import Swal from "sweetalert2";
+import { useRouter } from "vue-router";
 export default {
   setup() {
+    const router = useRouter();
     const userForm = ref({
       email: "",
       name: "",
       password: "",
     });
-
     const { createdUser } = useAuth();
-
     return {
       userForm,
       onSubmit: async () => {
-        const resp = await createdUser(userForm.value);
-        console.log(resp);
-        return {
-          resp
-        };
+        const { ok, message } = await createdUser(userForm.value);
+        if (!ok) Swal.fire('Erro', message, 'error')
+        else router.push({ name: 'no-entry' })
       },
     };
   },
